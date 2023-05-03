@@ -21,7 +21,7 @@ public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_id")
-    private Long userId;
+    private long userId;
 
     @NotNull(message = "First name cannot be missing or empty")
     @Column(nullable = false, length = 50)
@@ -39,5 +39,12 @@ public class User implements Serializable {
     private String password;
 
     private String phoneNumber;
+
+    private String address;
+
+    private Boolean isEmailVerified = false;
+
+    private String emailVerificationToken;
+
 
 }

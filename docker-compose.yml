@@ -19,6 +19,6 @@ services:
       - "3306:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=papimaciano
-      - MYSQL_DATABASE=spaceswift_db
+      - MYSQL_DATABASE=reservly_db
       - MYSQL_USER=root
       - MYSQL_PASSWORD=papimaciano
