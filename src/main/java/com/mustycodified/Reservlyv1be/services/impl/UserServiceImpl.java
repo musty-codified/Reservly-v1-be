@@ -1,10 +1,12 @@
 package com.mustycodified.Reservlyv1be.services.impl;
 
 import com.mustycodified.Reservlyv1be.dtos.requests.CreateUserRequest;
+import com.mustycodified.Reservlyv1be.dtos.requests.JavaMailDto;
 import com.mustycodified.Reservlyv1be.entities.User;
 import com.mustycodified.Reservlyv1be.enums.ResponseCodeEnum;
 import com.mustycodified.Reservlyv1be.respositories.UserRepository;
 import com.mustycodified.Reservlyv1be.restartifacts.BaseResponse;
+import com.mustycodified.Reservlyv1be.services.JavaMailService;
 import com.mustycodified.Reservlyv1be.services.UserService;
 import com.mustycodified.Reservlyv1be.utils.AppUtils;
 import com.mustycodified.Reservlyv1be.utils.ResponseCodeUtil;
@@ -19,6 +21,8 @@ public class UserServiceImpl implements UserService {
     private final ResponseCodeUtil responseCodeUtil;
     private final UserRepository userRepository;
     private final AppUtils appUtil;
+
+    private final JavaMailService mailService;
     @Override
     public BaseResponse signUp(CreateUserRequest createUserRequest) {
         if(createUserRequest.getFirstName().trim().length()==0 ||
@@ -47,10 +51,18 @@ public class UserServiceImpl implements UserService {
         newUser.setPassword("swifty1989");
         userRepository.save(newUser);
 
+        String subject = "One last step to complete your registration with Reservly";
+        String body = "Please Verify your email";
+
+        JavaMailDto mailDto = new JavaMailDto();
+        mailDto.setReceiverEmail(createUserRequest.getEmail());
+        mailDto.setBody(body);
+        mailDto.setSubject(subject);
+        mailService.sendMail(mailDto);
+
         return responseCodeUtil.updateResponseData(response, ResponseCodeEnum.SUCCESS,
                 "You have successful registered. Check your email to verify your account");
     }
-
 
     }
 
