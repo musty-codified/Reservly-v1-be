@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
@@ -23,18 +22,16 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
-
 @Service
 @RequiredArgsConstructor
 public class JavaMailServiceImpl implements JavaMailService {
-    private final JavaMailSender mailSender;
 
+    private final JavaMailSender mailSender;
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservlyV1BeApplication.class);
     private static final Marker IMPORTANT = MarkerFactory.getMarker("IMPORTANT");
 
     @Override
     public ResponseEntity<String> sendMail(JavaMailDto mailDto)  {
-
 
         if (!isValidEmail(mailDto.getReceiverEmail()))
             new ResponseEntity<>("Email is not valid", HttpStatus.BAD_REQUEST);

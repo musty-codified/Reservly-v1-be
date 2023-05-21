@@ -14,11 +14,10 @@ public enum ResponseCodeEnum {
     ERROR_RESETTING_PASSWORD(-6, "Password reset unsuccessful. Contact the Admin."),
     UNAUTHORISED_ACCESS(-7,"You are not authorised to perform this operation"),
     USER_NOT_FOUND(-8, "Email does not exist"),
-    ORDERS_NOT_FOUND(-9, "No Order found"),
+    BOOKINGS_NOT_FOUND(-9, "No booking found"),
+    ERROR_UPDATING_BOOKING_STATUS(-10, "Could not update booking status"),
 
-    ERROR_UPDATING_ORDER_STATUS(-10, "Could not update order status"),
-
-//    you can add your custom error codes as shown below just ensure that error codes have a minus sign
+//    you can add your custom error codes as shown below; just ensure that error codes have a minus sign
 //    ERROR_SETTING_THRESHOLD(-2, "An error occurred"),
     ;
     ResponseCodeEnum(int code, String description) {
