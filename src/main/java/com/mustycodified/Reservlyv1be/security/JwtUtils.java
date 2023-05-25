@@ -30,7 +30,18 @@ public class JwtUtils {
                 .setExpiration(expirationDate)
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
                 .compact();
-        return token;
+              return token;
+    }
+                  public String generatePasswordResetToken(String email){
+                      Date currentDate = new Date();
+                      Date expirationDate = new Date(currentDate.getTime() + 3600000);
+                      String token = Jwts.builder()
+                              .setSubject(email)
+                              .setExpiration(expirationDate)
+                              .signWith(SignatureAlgorithm.HS512, SecurityConstants.getTokenSecret())
+                              .compact();
+                      return token;
+
                   }
     }
 

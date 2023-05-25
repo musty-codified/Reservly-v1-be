@@ -31,6 +31,5 @@ public class CreateUserRequest implements Serializable {
 
     @NotBlank(message = "Confirm password name cannot be blank")
     @Size(min = 8, max=25, message="Password must be equal to or greater than 8 character and less than 25 characters")
-
     private String password;
 }

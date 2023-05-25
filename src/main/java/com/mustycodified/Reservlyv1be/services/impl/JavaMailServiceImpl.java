@@ -47,7 +47,7 @@ public class JavaMailServiceImpl implements JavaMailService {
 
         try {
             LOGGER.info("Beginning of log *********");
-            LOGGER.info(IMPORTANT, "Sending mail to: " + mailDto.getReceiverEmail());
+            LOGGER.info(IMPORTANT, "Sending email to: " + mailDto.getReceiverEmail());
             mailSender.send(message);
             return new ResponseEntity<>("Sent", HttpStatus.OK);
         } catch (Exception e) {

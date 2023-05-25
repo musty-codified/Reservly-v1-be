@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,16 +20,17 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableWebSecurity
-@EnableMethodSecurity(securedEnabled = true)
+@EnableGlobalMethodSecurity(securedEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final PasswordEncoder passwordEncoder;
     private final UserService userDetailsService;
 
-  private String path = "/api/v1/";
-    private final String[] WHITE_LISTED_URLS = { SecurityConstants.EMAIL_VERIFICATION_URL, SecurityConstants.SIGN_UP_URL,
-            "/swagger*/**","/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**"};
-
+    private String path = "/api/v1/";
+    private final String[] WHITE_LISTED_URLS = { SecurityConstants.SIGN_UP_URL, SecurityConstants.EMAIL_VERIFICATION_URL,
+             SecurityConstants.PASSWORD_REQUEST_URL,SecurityConstants.PASSWORD_RESET_URL,
+            "/swagger*/**","/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**"
+    };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 
