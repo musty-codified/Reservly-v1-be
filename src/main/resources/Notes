@@ -1,0 +1,15 @@
+
+DTOs let us transfer only the data that we need to share with the user interface
+and not the entire entity object that we may have aggregated using several sub-objects
+and persisted in the database.
+
+DTOs are not meant to be the mirror image of their entities counterparts,
+rather they should be a reflection of what the user interface or the api response demands.
+
+The mapping of entity to the DTOs can be handled using ModelMapper utility,
+however it's only useful when your DTO is almost similar (literally) to the concerned entity
+which is not always the case and hence I prefer using custom mapper classes.
+
+
+This not only decouples these DTOs, it also reduces the overall size of the
+response packet that will travel over HTTP from server to the client.
