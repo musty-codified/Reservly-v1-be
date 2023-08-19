@@ -30,11 +30,7 @@ import java.util.regex.Pattern;
 
 public class EmailServiceImpl implements EmailService {
 
-
-
-
     private final JavaMailSender javaMailSender;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ReservlyV1BeApplication.class);
     private static final Marker IMPORTANT = MarkerFactory.getMarker("IMPORTANT");
 
@@ -55,7 +51,7 @@ public class EmailServiceImpl implements EmailService {
         message.setSubject(mailDto.getSubject());
         message.setText(mailDto.getBody());
 
-        try{
+        try {
 
             LOGGER.info("Beginning of log *********");
             LOGGER.info(IMPORTANT, "Sending email to: " + mailDto.getTo());

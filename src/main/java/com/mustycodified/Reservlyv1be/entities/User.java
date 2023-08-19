@@ -1,18 +1,10 @@
 package com.mustycodified.Reservlyv1be.entities;
-
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.mustycodified.Reservlyv1be.enums.Gender;
-import com.mustycodified.Reservlyv1be.enums.UserRole;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 @Table(name = "user_tbl")
@@ -20,46 +12,38 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
-public class User extends BaseEntity{
+@Builder
+public class User extends BaseEntity implements Serializable {
 
-    @NotNull(message = "First name cannot be missing or empty")
-    @Column(nullable = false, length = 50)
-    private String firstName;
+    private static final long serialVersionUID = 2L;
 
-    @NotNull(message = "Last name cannot be missing or empty")
-    @Column(nullable = false, length = 50)
-    private String lastName;
+    @Column(unique = true)
+    private String userId;
 
-    @Email
     @Column(unique = true, nullable = false)
     private String email;
 
-    private String date_of_birth;
-
-    private String phone;
-
-    private String nationality;
-
-    private Boolean emailVerificationStatus;
-
-    private boolean emailVerificationToken = true;
-
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Gender gender;
-
     private String password;
 
-    @Enumerated(EnumType.STRING)
+    @NotNull(message = "Username cannot be missing or empty")
+    private String username;
+
     @Column(nullable = false)
-    private UserRole role;
+    private String status;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Admin admin;
+    @Column(length = 15)
+    private String phoneNumber;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Guest guest;
+    @Column(nullable = false)
+    private String roles;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "address")
+    private String address;
+
+    private Date lastLoginDate;
 
 }

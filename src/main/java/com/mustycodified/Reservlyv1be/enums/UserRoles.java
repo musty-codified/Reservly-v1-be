@@ -1,18 +1,20 @@
 package com.mustycodified.Reservlyv1be.enums;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.google.common.collect.Sets;
 
-import java.util.HashSet;
 import java.util.Set;
 
-public enum UserRole {
-    ADMIN,
-    GUEST;
+import static com.mustycodified.Reservlyv1be.enums.Authorities.*;
 
-    public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(this.name()));
+public enum UserRoles {
+    ADMIN (Sets.newHashSet(USER_READ, USER_EDIT, USER_DELETE)),
+    GUEST (Sets.newHashSet(USER_READ, USER_EDIT));
+    private final Set<Authorities> authorities;
+
+    UserRoles(Set<Authorities> authorities) {
+        this.authorities = authorities;
+    }
+    public Set<Authorities> getAuthorities(){
         return authorities;
     }
-
 }
