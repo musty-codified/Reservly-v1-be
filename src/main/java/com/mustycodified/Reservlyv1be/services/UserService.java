@@ -24,4 +24,5 @@ public interface UserService {
 
     String logout(String token);
 
+    UserResponseDto updatePassword(ChangePasswordDto changePasswordDto);
 }

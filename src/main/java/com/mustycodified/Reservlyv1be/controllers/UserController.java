@@ -1,10 +1,12 @@
 package com.mustycodified.Reservlyv1be.controllers;
 
 
+import com.mustycodified.Reservlyv1be.dtos.RequestDtos.ChangePasswordDto;
 import com.mustycodified.Reservlyv1be.dtos.RequestDtos.SignupRequestDto;
 import com.mustycodified.Reservlyv1be.dtos.RequestDtos.UpdateUserRequestDto;
 import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.ApiResponse;
 import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.UserResponseDto;
+import com.mustycodified.Reservlyv1be.exceptions.ValidationException;
 import com.mustycodified.Reservlyv1be.services.UserService;
 import com.mustycodified.Reservlyv1be.utils.ResponseManager;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -61,5 +64,16 @@ public class UserController {
         UserResponseDto userResponseDto = userService.updateUser(userId, request);
         return responseManager.success(userResponseDto);
 
+    }
+
+    @Operation(summary = "Updates a logged in user password, generates a new Bearer token and blacklists the old token")
+    @PostMapping("/update-password")
+    public ResponseEntity<ApiResponse<UserResponseDto>> updatePassword(@RequestBody ChangePasswordDto changePasswordDto, @RequestHeader("Authorization") String token) {
+        if (token.startsWith("Bearer")) {
+            token = token.replace("Bearer", "").replace("\\s", "");
+        } else throw new ValidationException( "Invalid access token. Pls ensure token starts with 'Bearer '");
+        changePasswordDto.setToken(token);
+
+        return ResponseEntity.ok(new ApiResponse<>("Password updated",true, userService.updatePassword(changePasswordDto)));
     }
 }

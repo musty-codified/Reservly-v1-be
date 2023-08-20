@@ -1,6 +1,9 @@
 package com.mustycodified.Reservlyv1be.security;
 
+import com.mustycodified.Reservlyv1be.entities.User;
+import com.mustycodified.Reservlyv1be.exceptions.ValidationException;
 import com.mustycodified.Reservlyv1be.repositories.UserRepository;
+import com.mustycodified.Reservlyv1be.utils.LocalMemStorage;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -10,20 +13,22 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class JwtUtils {
 
+    private final LocalMemStorage memStorage;
+    private final UserRepository userRepository;
+
+
     @Value("${app.jwt_secret}")
      private String JWT_SECRET;
 
-    private final UserRepository userRepository;
     public String extractUsername(String token){
         return extractClaim(token, Claims::getSubject);
     }
@@ -57,14 +62,18 @@ public class JwtUtils {
         return claims;
     }
 
-    private Boolean isTokenExpired(String token) {
+    public Boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(String email, String userId) {
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-         claims.put("userId", userId);
-        return createToken(claims, email);
+
+      User user = userRepository.findByEmail(userDetails.getUsername())
+              .orElseThrow(()-> new ValidationException("Error generating token"));
+         claims.put("userId", user.getUserId());
+         claims.put("authorities", userDetails.getAuthorities().stream().map(Objects::toString).collect(Collectors.joining(" ")));
+        return createToken(claims, userDetails.getUsername());
     }
     private String createToken(Map<String, Object> claims, String email) {
         return Jwts.builder()
@@ -79,6 +88,13 @@ public class JwtUtils {
 
     public Boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
+        if (memStorage.keyExist("Blacklist")) {
+            String[] blacklistTokens = memStorage.getValueByKey("Blacklist").split(" ,");
+            Set<String> blacklists = Arrays.stream(blacklistTokens).collect(Collectors.toSet());
+            if (blacklists.contains(token)) {
+                return false;
+            }
+        }
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 

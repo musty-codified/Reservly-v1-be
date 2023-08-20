@@ -27,10 +27,10 @@ public class SecurityConfig {
     private final CustomUserDetailService customUserDetailService;
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthFilter jwtAuthFilter;
-    private static final String [] WHITE_LISTED_URLS = {"/api/v1/users/signup", "/api/v1/auth/login", "/api/v1/auth/logout",
-            "/api/v1/auth/activate-account", "/api/v1/auth/forgot-password", "/api/v1/auth/resend-token",
-            "/v3/api-docs/**",  "/configuration/**",   "/swagger*/**",
-            "/swagger-ui/**",  "/webjars/**"};
+    private static final String [] WHITE_LISTED_URLS = {"/api/v1/users/signup", "/api/v1/auth/**",
+            "/api/v1/auth/logout", "/v3/api-docs/**",  "/configuration/**",  "/swagger*/**",
+            "/swagger-ui/**",  "/webjars/**"
+    };
 
 
     @Bean
@@ -59,8 +59,10 @@ public class SecurityConfig {
                 registry
                         .addMapping("/**")
                         .allowedMethods(CorsConfiguration.ALL)
+                        .allowedOrigins("http://localhost:3000")
                         .allowedHeaders(CorsConfiguration.ALL)
-                        .allowedOriginPatterns(CorsConfiguration.ALL);
+                        .allowedOriginPatterns(CorsConfiguration.ALL)
+                        .maxAge(3600L);
             }
         };
     }

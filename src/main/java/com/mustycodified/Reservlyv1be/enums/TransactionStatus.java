@@ -1,8 +1,8 @@
 package com.mustycodified.Reservlyv1be.enums;
 
-public enum BookingStatus {
-
+public enum TransactionStatus {
     PENDING,
-    CONFIRMED,
+    COMPLETED,
     CANCELED;
+
 }

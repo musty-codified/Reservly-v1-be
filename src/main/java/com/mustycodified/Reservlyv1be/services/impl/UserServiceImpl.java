@@ -71,6 +71,8 @@ public class UserServiceImpl implements UserService {
                 .status(Status.INACTIVE.name())
                 .roles(UserRoles.GUEST.getAuthorities().stream()
                         .map(Object::toString).collect(Collectors.joining(",")))
+                .address(signupRequest.getAddress())
+                .phoneNumber(signupRequest.getPhoneNumber())
                 .build();
                 User storedUser = userRepository.save(user);
 
@@ -162,7 +164,7 @@ public class UserServiceImpl implements UserService {
 
         UserDetails userDetails = customUserDetailService.loadUserByUsername(request.getEmail());
 
-        String token = jwtUtil.generateToken(userDetails.getUsername(), user.getUserId());
+        String token = jwtUtil.generateToken(userDetails);
         user.setLastLoginDate(new Date());
 
         LoginResponseDto responseDto = LoginResponseDto.builder()
@@ -179,6 +181,23 @@ public class UserServiceImpl implements UserService {
         }
         blacklistToken(headerToken);
         return "Logout successful";    }
+
+    @Override
+    public UserResponseDto updatePassword(ChangePasswordDto changePasswordDto) {
+        if (jwtUtil.isTokenExpired(changePasswordDto.getToken()))
+            throw new ValidationException("Request token has expired");
+
+        blacklistToken(changePasswordDto.getToken());
+
+        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String newToken = jwtUtil.generateToken(userDetails);
+
+        UserResponseDto userResponseDto = appUtil.getMapper().convertValue(userRepository.findByEmail(changePasswordDto.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User does not exist")), UserResponseDto.class);
+        userResponseDto.setToken(newToken);
+
+        return userResponseDto;
+    }
 
 
     private void blacklistToken(String headerToken) {
