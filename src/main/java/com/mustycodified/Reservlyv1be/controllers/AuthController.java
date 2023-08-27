@@ -1,12 +1,11 @@
 package com.mustycodified.Reservlyv1be.controllers;
 
-
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.ActivateUserDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.ChangePasswordDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.LoginRequestDto;
-import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.LoginResponseDto;
-import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.ApiResponse;
-import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.UserResponseDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.ActivateUserDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.ChangePasswordDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.LoginRequestDto;
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.LoginResponseDto;
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.ApiResponse;
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.UserResponseDto;
 import com.mustycodified.Reservlyv1be.services.UserService;
 import com.mustycodified.Reservlyv1be.utils.ResponseManager;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +24,7 @@ public class AuthController {
 
     @Operation(summary = "Activates a newly created account or an inactive account",
             description = "Once activated, you can then login using the 'login' end point.\n" +
-                    "Ensure that you enter the complete verification code sent to your email, it starts with 'verify...'")
+                    "Ensure that you enter the complete verification code sent to your email without any whitespaces, it starts with 'verify...'")
     @PostMapping("/activate-account")
     public ResponseEntity<ApiResponse<UserResponseDto>> activateUser(@RequestBody ActivateUserDto activateUserDto) {
         return ResponseEntity.ok( new ApiResponse<>("User Activated!", true, userService.activateUser(activateUserDto)));

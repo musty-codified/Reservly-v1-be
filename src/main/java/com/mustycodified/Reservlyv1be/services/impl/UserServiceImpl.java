@@ -1,14 +1,16 @@
 package com.mustycodified.Reservlyv1be.services.impl;
 
-import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.LoginResponseDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.ActivateUserDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.ChangePasswordDto;
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.LoginResponseDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.ActivateUserDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.ChangePasswordDto;
 import com.mustycodified.Reservlyv1be.dtos.EmailDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.LoginRequestDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.SignupRequestDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.UpdateUserRequestDto;
-import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.UserResponseDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.LoginRequestDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.SignupRequestDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.UpdateUserRequestDto;
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.UserResponseDto;
 import com.mustycodified.Reservlyv1be.entities.User;
+//import com.mustycodified.Reservlyv1be.entities.Wallet;
+import com.mustycodified.Reservlyv1be.entities.Wallet;
 import com.mustycodified.Reservlyv1be.enums.Status;
 import com.mustycodified.Reservlyv1be.enums.UserRoles;
 import com.mustycodified.Reservlyv1be.exceptions.RecordAlreadyExistException;
@@ -35,6 +37,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,6 +54,8 @@ public class UserServiceImpl implements UserService {
     private final AuthenticationManager authenticationManager;
     private final LocalMemStorage memStorage;
     private final PasswordEncoder passwordEncoder;
+    private final WalletRepository walletRepository;
+
 
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequest) {
@@ -109,6 +114,15 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         userToActivate.setStatus(Status.ACTIVE.name());
         UserResponseDto userResponseDto = appUtil.getMapper().convertValue(userRepository.save(userToActivate), UserResponseDto.class);
+
+        Wallet newWallet = Wallet.builder()
+                .walletUUID(appUtil.generateSerialNumber("w"))
+                .balance(BigDecimal.ZERO)
+                .userDetails(userToActivate)
+                .build();
+
+              walletRepository.save(newWallet);
+
         EmailDto mailDto = EmailDto.builder()
                 .to(userToActivate.getEmail())
                 .subject("YOUR ACCOUNT IS ACTIVATED")

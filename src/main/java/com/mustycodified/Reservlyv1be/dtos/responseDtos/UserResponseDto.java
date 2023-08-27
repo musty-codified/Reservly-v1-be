@@ -1,4 +1,4 @@
-package com.mustycodified.Reservlyv1be.dtos.ResponseDtos;
+package com.mustycodified.Reservlyv1be.dtos.responseDtos;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

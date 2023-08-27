@@ -1,6 +1,6 @@
 package com.mustycodified.Reservlyv1be.utils;
 
-import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.UserResponseDto;
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.UserResponseDto;
 import com.mustycodified.Reservlyv1be.entities.User;
 import org.springframework.stereotype.Component;
 

@@ -1,15 +1,15 @@
-package com.mustycodified.Reservlyv1be.dtos.ResponseDtos;
+package com.mustycodified.Reservlyv1be.dtos.responseDtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.http.HttpStatus;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ApiResponse<T> {
     private String message;
     private boolean status;
-    private T payload;
+    private T data;
 
 }

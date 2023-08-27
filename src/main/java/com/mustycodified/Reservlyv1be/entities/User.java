@@ -45,5 +45,8 @@ public class User extends BaseEntity implements Serializable {
     private String address;
 
     private Date lastLoginDate;
+    @OneToOne (cascade = CascadeType.ALL)
+    @JoinColumn(name = "wallet_id")
+    private Wallet wallet;
 
 }

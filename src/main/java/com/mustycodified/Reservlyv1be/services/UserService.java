@@ -1,11 +1,11 @@
 package com.mustycodified.Reservlyv1be.services;
-import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.LoginResponseDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.ActivateUserDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.ChangePasswordDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.LoginRequestDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.SignupRequestDto;
-import com.mustycodified.Reservlyv1be.dtos.RequestDtos.UpdateUserRequestDto;
-import com.mustycodified.Reservlyv1be.dtos.ResponseDtos.UserResponseDto;
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.LoginResponseDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.ActivateUserDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.ChangePasswordDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.LoginRequestDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.SignupRequestDto;
+import com.mustycodified.Reservlyv1be.dtos.requestDtos.UpdateUserRequestDto;
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.UserResponseDto;
 import org.springframework.data.domain.Page;
 
 public interface UserService {

@@ -1,4 +1,4 @@
-package com.mustycodified.Reservlyv1be.dtos.RequestDtos;
+package com.mustycodified.Reservlyv1be.dtos.requestDtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
