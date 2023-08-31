@@ -26,7 +26,6 @@ import java.util.List;
 @EnableCaching
 public class MemcachedConfig extends AbstractSSMConfiguration {
 
-
     @Value("${memcached.service.host}" )
     private String memcachedHost;
 
@@ -42,11 +41,11 @@ public class MemcachedConfig extends AbstractSSMConfiguration {
 
         try {
 
-            client = new XMemcachedClient(memcachedHost,memcachedPort);
+            client = new XMemcachedClient(memcachedHost, memcachedPort);
 
         } catch (NumberFormatException | IOException e) {
             e.printStackTrace();
-            logger.error("Memcached encountered an error : {}",e.getMessage());
+            logger.error("Memcached encountered an error : {}", e.getMessage());
         }
 
         return client;

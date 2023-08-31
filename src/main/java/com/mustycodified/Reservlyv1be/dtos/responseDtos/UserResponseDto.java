@@ -17,9 +17,10 @@ import java.util.Date;
 public class UserResponseDto {
     private String userId;
     private String email;
-    private String username;
+    private String firstName;
+    private String lastName;
     private String address;
     private String phoneNumber;
-    private Date lastLoginDate;
     private String token;
+
 }

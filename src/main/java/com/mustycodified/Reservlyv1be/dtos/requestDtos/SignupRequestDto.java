@@ -22,9 +22,13 @@ public class SignupRequestDto {
     @Schema(example = "1994")
     private String password;
 
-    @NotBlank(message = "Username is mandatory")
+    @NotBlank(message = "Firstname is mandatory")
     @Schema(example = "Mustapha")
-    private String username;
+    private String firstName;
+
+    @NotBlank(message = "Lastname is mandatory")
+    @Schema(example = "Musa")
+    private String lastName;
 
     @NotNull
     @Schema(example = "Ilara Road, Ilisan Remo")

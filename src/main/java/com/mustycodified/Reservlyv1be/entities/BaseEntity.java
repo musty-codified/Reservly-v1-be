@@ -16,6 +16,8 @@ import java.util.Date;
 @Getter
 @Setter
 public abstract class BaseEntity implements Serializable {
+    private static final long serialVersionUID = 2L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")

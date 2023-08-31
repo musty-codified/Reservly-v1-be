@@ -38,7 +38,6 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public ResponseEntity<String> sendMail(EmailDto mailDto) {
 
-
         if (!isValidEmail(mailDto.getTo()))
             new ResponseEntity<>("Email is not valid", HttpStatus.BAD_REQUEST);
 

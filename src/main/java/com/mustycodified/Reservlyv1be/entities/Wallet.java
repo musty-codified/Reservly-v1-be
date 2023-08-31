@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Setter
 @Getter
 @Builder
-public class Wallet extends BaseEntity implements Serializable {
+public class Wallet extends BaseEntity {
     private static final long serialVersionUID = 2L;
 
     @Column(unique = true)

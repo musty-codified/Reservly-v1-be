@@ -13,6 +13,11 @@ public class EmailConfig {
 
     @Bean
     public JavaMailSender getJavaMailSender(){
+
+//        Dotenv dotenv = Dotenv.load();
+//        String email = dotenv.get("EMAIL_ADDRESS"); //you can add your email here if you did not set up .env file
+//        String password = dotenv.get("PASSWORD");   //you can add your password here if you did not set up .env file
+
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);

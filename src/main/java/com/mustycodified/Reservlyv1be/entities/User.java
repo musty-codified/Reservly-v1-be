@@ -13,7 +13,7 @@ import java.util.Date;
 @Setter
 @Getter
 @Builder
-public class User extends BaseEntity implements Serializable {
+public class User extends BaseEntity{
 
     private static final long serialVersionUID = 2L;
 
@@ -26,8 +26,11 @@ public class User extends BaseEntity implements Serializable {
     @Column(nullable = false)
     private String password;
 
-    @NotNull(message = "Username cannot be missing or empty")
-    private String username;
+    @NotNull(message = "Firstname cannot be missing or empty")
+    private String firstName;
+
+    @NotNull(message = "Lastname cannot be missing or empty")
+    private String lastName;
 
     @Column(nullable = false)
     private String status;

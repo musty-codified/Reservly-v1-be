@@ -9,7 +9,6 @@ import com.mustycodified.Reservlyv1be.dtos.requestDtos.SignupRequestDto;
 import com.mustycodified.Reservlyv1be.dtos.requestDtos.UpdateUserRequestDto;
 import com.mustycodified.Reservlyv1be.dtos.responseDtos.UserResponseDto;
 import com.mustycodified.Reservlyv1be.entities.User;
-//import com.mustycodified.Reservlyv1be.entities.Wallet;
 import com.mustycodified.Reservlyv1be.entities.Wallet;
 import com.mustycodified.Reservlyv1be.enums.Status;
 import com.mustycodified.Reservlyv1be.enums.UserRoles;
@@ -63,21 +62,21 @@ public class UserServiceImpl implements UserService {
         if (!appUtil.validEmail(signupRequest.getEmail())) {
             throw new ValidationException("Invalid email address {"+ signupRequest.getEmail()+"}");
         }
-        boolean emailExist = userRepository.existsByEmail(signupRequest.getEmail());
 
-        if (emailExist)
+        if (userRepository.existsByEmail(signupRequest.getEmail()))
             throw new RecordAlreadyExistException("Record already exist");
 
         User user = User.builder()
                 .userId(appUtil.generateSerialNumber("usr"))
                 .email(signupRequest.getEmail())
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
-                .username(signupRequest.getUsername())
+                .firstName(signupRequest.getFirstName())
+                .lastName(signupRequest.getLastName())
                 .status(Status.INACTIVE.name())
                 .roles(UserRoles.GUEST.getAuthorities().stream()
                         .map(Object::toString).collect(Collectors.joining(",")))
                 .address(signupRequest.getAddress())
-                .phoneNumber(signupRequest.getPhoneNumber())
+                .phoneNumber(appUtil.getFormattedNumber(signupRequest.getPhoneNumber()))
                 .build();
                 User storedUser = userRepository.save(user);
 
@@ -97,7 +96,7 @@ public class UserServiceImpl implements UserService {
         EmailDto mailDto = EmailDto.builder()
                 .to(userEmail)
                 .subject(subject.toUpperCase())
-                .body(String.format("Use this generated token to %s: %s (Expires in 15mins)", subject.toLowerCase(), token))
+                .body(String.format("Use this generated token to verify your account: %s (Expires in 15mins)", token))
                 .build();
 
         emailService.sendMail(mailDto);
@@ -126,7 +125,7 @@ public class UserServiceImpl implements UserService {
         EmailDto mailDto = EmailDto.builder()
                 .to(userToActivate.getEmail())
                 .subject("YOUR ACCOUNT IS ACTIVATED")
-                .body(String.format("Hi %s, \n You have successfully activated your account. Kindly login to start making use of the app", userResponseDto.getUsername()))
+                .body(String.format("Hi %s, \n You have successfully activated your account. Kindly login to start making use of the app", userResponseDto.getLastName()))
                 .build();
 
         emailService.sendMail(mailDto);
@@ -148,7 +147,7 @@ public class UserServiceImpl implements UserService {
                 .to(userToResetPassword.getEmail())
                 .subject("PASSWORD RESET SUCCESSFUL")
                 .body(String.format("Hi %s, \n You have successfully reset your password. Kindly login with your new password. " +
-                        "\n If you did not authorize this, kindly create a ticket from our complaint section on the app", userToResetPassword.getUsername()))
+                        "\n If you did not authorize this, kindly create a ticket from our complaint section on the app", userToResetPassword.getLastName()))
                 .build();
 
         emailService.sendMail(mailDto);
@@ -182,8 +181,9 @@ public class UserServiceImpl implements UserService {
         user.setLastLoginDate(new Date());
 
         LoginResponseDto responseDto = LoginResponseDto.builder()
-                .username(user.getUsername())
                 .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
                 .token(token)
                 .build();
         return responseDto;    }
@@ -255,13 +255,13 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserId(userId).
                 orElseThrow(() -> new UserNotFoundException("User not found"));
         user.setEmail(updateRequestDto.getEmail());
-        user.setUsername(updateRequestDto.getUsername());
+        user.setFirstName(updateRequestDto.getFirstName());
+        user.setLastName(updateRequestDto.getLastName());
         user.setUserId(appUtil.generateUserId(10));User updatedUser = userRepository.save(user);
 
         return Mapper.toUserDto(updatedUser);
 
     }
-
 
     public void validateToken(String memCachedKey, String token) {
 
@@ -271,7 +271,7 @@ public class UserServiceImpl implements UserService {
         String cachedToken = memStorage.getValueByKey(memCachedKey);
         if (cachedToken == null)
             throw new ValidationException("Token expired");
-        if (!cachedToken.equals(token))
+        if (!cachedToken.equalsIgnoreCase(token))
             throw new ValidationException("Invalid token");
 
         if (!userRepository.existsByEmail(memCachedKey))

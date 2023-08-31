@@ -11,7 +11,6 @@ import com.mustycodified.Reservlyv1be.services.TransactionService;
 import com.mustycodified.Reservlyv1be.services.WalletService;
 import com.mustycodified.Reservlyv1be.utils.AppUtils;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,9 +32,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final RestTemplate restTemplate;
     private final AppUtils appUtil;
     private final TransactionRepository transactionRepository;
-
     private final TransactionService transactionService;
-
     private final WalletService walletService;
 
     private HttpServletRequest servletRequest;

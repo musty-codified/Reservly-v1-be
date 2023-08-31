@@ -30,8 +30,7 @@ public class UserController {
                     "If no code was sent to you, then use the 'resend-token' end point to resend a new activation code")
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Object>> createUser(@RequestBody @Valid SignupRequestDto signupRequest) {
-        UserResponseDto userResponseDto = userService.signUp(signupRequest);
-        return responseManager.success(userResponseDto);
+        return responseManager.success(userService.signUp(signupRequest));
     }
 
     @GetMapping("/{userId}")

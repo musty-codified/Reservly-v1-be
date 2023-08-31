@@ -15,7 +15,6 @@ public interface UserService {
      void deleteUser(String userId);
     UserResponseDto updateUser(String userId, UpdateUserRequestDto updateRequestDto);
     String sendToken(String userEmail, String mailSubject);
-
     UserResponseDto activateUser(ActivateUserDto activateUserDto);
 
     String resetPassword(ChangePasswordDto changePasswordDto);
