@@ -63,7 +63,6 @@ public class LocalMemStorage {
         }
     }
 
-
     public void clear(String key) {
         try {
             memcachedClient.delete(key);

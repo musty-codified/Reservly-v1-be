@@ -21,7 +21,7 @@ import javax.validation.Valid;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-public class UserController {
+public class  UserController {
     private final ResponseManager responseManager;
     private final UserService userService;
     @Operation(summary = "Create a new user account",

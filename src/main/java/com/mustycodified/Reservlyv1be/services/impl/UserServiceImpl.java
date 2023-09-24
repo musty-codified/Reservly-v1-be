@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequest) {
-
+        ///Validate registration
         if (!appUtil.validEmail(signupRequest.getEmail())) {
             throw new ValidationException("Invalid email address {"+ signupRequest.getEmail()+"}");
         }
@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(signupRequest.getEmail()))
             throw new RecordAlreadyExistException("Record already exist");
 
+               //Remember User
         User user = User.builder()
                 .userId(appUtil.generateSerialNumber("usr"))
                 .email(signupRequest.getEmail())
@@ -92,10 +93,10 @@ public class UserServiceImpl implements UserService {
 
         String token = appUtil.generateSerialNumber("verify");
         memStorage.save(userEmail, token, 900); //expires in 15mins
-
+          //Send email
         EmailDto mailDto = EmailDto.builder()
                 .to(userEmail)
-                .subject(subject.toUpperCase())
+                .subject(subject.toUpperCase()) //subject line
                 .body(String.format("Use this generated token to verify your account: %s (Expires in 15mins)", token))
                 .build();
 
@@ -107,7 +108,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponseDto activateUser(ActivateUserDto activateUserDto) {
 
-        validateToken(activateUserDto.getEmail(), activateUserDto.getEmailVerificationToken());
+        validateToken(activateUserDto.getEmail(), activateUserDto.getToken());
 
         User userToActivate = userRepository.findByEmail(activateUserDto.getEmail())
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
@@ -121,7 +122,7 @@ public class UserServiceImpl implements UserService {
                 .build();
 
               walletRepository.save(newWallet);
-
+            //Send email
         EmailDto mailDto = EmailDto.builder()
                 .to(userToActivate.getEmail())
                 .subject("YOUR ACCOUNT IS ACTIVATED")

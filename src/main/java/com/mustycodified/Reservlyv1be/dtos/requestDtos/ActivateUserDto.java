@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ActivateUserDto {
     private String email;
-    private String emailVerificationToken;
+    private String token;
 }

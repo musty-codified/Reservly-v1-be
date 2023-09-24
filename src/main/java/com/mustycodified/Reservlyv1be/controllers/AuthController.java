@@ -49,7 +49,7 @@ public class AuthController {
     return responseManager.success(loginResponseDto);
   }
 
-  @Operation(summary = "Blacklists the users token")
+  @Operation(summary = "Blacklists the user's token")
   @PostMapping("/logout")
   public ResponseEntity<ApiResponse<Object>> logout(@RequestHeader("Authorization") String token) {
     return responseManager.success(userService.logout(token));

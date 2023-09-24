@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
         "<li>Copy the payment link returned in the response object to any browser to make your payment.</li>" +
         "<li>Copy the reference code returned if it was successful and go to '/verify/{payment_reference}' endpoint to verify if your deposit was successful</li>" +
         "</ol> " )
-public class PaymentController {
+ public class PaymentController {
 
     private final PaymentService paymentService;
     private final Logger logger = LoggerFactory.getLogger(PaymentController.class);
