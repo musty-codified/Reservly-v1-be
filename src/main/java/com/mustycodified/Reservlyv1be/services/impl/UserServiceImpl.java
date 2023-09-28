@@ -36,6 +36,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -55,19 +57,21 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final WalletRepository walletRepository;
 
+    private final HttpServletRequest httpServletRequest;
+
+
 
     @Override
     public UserResponseDto signUp(SignupRequestDto signupRequest) {
-        ///Validate registration
+        //Validate registration
         if (!appUtil.validEmail(signupRequest.getEmail())) {
             throw new ValidationException("Invalid email address {"+ signupRequest.getEmail()+"}");
         }
-
         if (userRepository.existsByEmail(signupRequest.getEmail()))
             throw new RecordAlreadyExistException("Record already exist");
 
                //Remember User
-        User user = User.builder()
+              User user = User.builder()
                 .userId(appUtil.generateSerialNumber("usr"))
                 .email(signupRequest.getEmail())
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
@@ -93,6 +97,7 @@ public class UserServiceImpl implements UserService {
 
         String token = appUtil.generateSerialNumber("verify");
         memStorage.save(userEmail, token, 900); //expires in 15mins
+
           //Send email
         EmailDto mailDto = EmailDto.builder()
                 .to(userEmail)
@@ -115,18 +120,20 @@ public class UserServiceImpl implements UserService {
         userToActivate.setStatus(Status.ACTIVE.name());
         UserResponseDto userResponseDto = appUtil.getMapper().convertValue(userRepository.save(userToActivate), UserResponseDto.class);
 
+
+        //Remember Wallet Details
         Wallet newWallet = Wallet.builder()
                 .walletUUID(appUtil.generateSerialNumber("w"))
                 .balance(BigDecimal.ZERO)
                 .userDetails(userToActivate)
                 .build();
-
               walletRepository.save(newWallet);
+
             //Send email
         EmailDto mailDto = EmailDto.builder()
                 .to(userToActivate.getEmail())
                 .subject("YOUR ACCOUNT IS ACTIVATED")
-                .body(String.format("Hi %s, \n You have successfully activated your account. Kindly login to start making use of the app", userResponseDto.getLastName()))
+                .body(String.format("Hi %s, \n You have successfully activated your account. Kindly login to start making use of Reservly app", userResponseDto.getLastName()))
                 .build();
 
         emailService.sendMail(mailDto);
@@ -144,11 +151,11 @@ public class UserServiceImpl implements UserService {
         userToResetPassword.setPassword(passwordEncoder.encode(changePasswordDto.getPassword()));
         userRepository.save(userToResetPassword);
 
+        //Send email
         EmailDto mailDto = EmailDto.builder()
                 .to(userToResetPassword.getEmail())
                 .subject("PASSWORD RESET SUCCESSFUL")
-                .body(String.format("Hi %s, \n You have successfully reset your password. Kindly login with your new password. " +
-                        "\n If you did not authorize this, kindly create a ticket from our complaint section on the app", userToResetPassword.getLastName()))
+                .body(String.format("Hi %s, \n You have successfully reset your password. Kindly login with your new password. ", userToResetPassword.getLastName()))
                 .build();
 
         emailService.sendMail(mailDto);
@@ -191,6 +198,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String logout(String headerToken) {
+
+//     HttpSession session = httpServletRequest.getSession();
+
         if (headerToken.startsWith("Bearer")) {
             headerToken = headerToken.replace("Bearer", "").replace("\\s", "");
         }
@@ -264,18 +274,18 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    public void validateToken(String memCachedKey, String token) {
+    public void validateToken(String userEmail, String token) {
 
-        if (!appUtil.validEmail(memCachedKey))
+        if (!appUtil.validEmail(userEmail))
             throw new ValidationException("Invalid email");
 
-        String cachedToken = memStorage.getValueByKey(memCachedKey);
+        String cachedToken = memStorage.getValueByKey(userEmail);
         if (cachedToken == null)
             throw new ValidationException("Token expired");
         if (!cachedToken.equalsIgnoreCase(token))
             throw new ValidationException("Invalid token");
 
-        if (!userRepository.existsByEmail(memCachedKey))
+        if (!userRepository.existsByEmail(userEmail))
             throw new UserNotFoundException("User not found");
     }
 

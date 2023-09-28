@@ -1,6 +1,7 @@
 package com.mustycodified.Reservlyv1be.config;
 
 
+import com.mustycodified.Reservlyv1be.enums.UserRoles;
 import com.mustycodified.Reservlyv1be.security.CustomUserDetailService;
 import com.mustycodified.Reservlyv1be.security.JwtAuthFilter;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +30,6 @@ public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
     private static final String [] WHITE_LISTED_URLS = {
             "/api/v1/payment/**",
-
             "/api/v1/users/signup",
             "/api/v1/auth/**",
             "/api/v1/users/update-password",
@@ -43,6 +43,7 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(WHITE_LISTED_URLS).permitAll()
+                .antMatchers("/api/v1/rooms/**").hasRole(UserRoles.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()

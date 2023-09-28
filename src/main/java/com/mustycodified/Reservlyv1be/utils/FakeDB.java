@@ -24,7 +24,7 @@ public class FakeDB implements CommandLineRunner {
     private final UserRepository userRepository;
     @Override
     public void run(String... args) throws Exception {
-             // Create and save Users with associated Wallets
+             // Create and save users with associated wallets
             IntStream.rangeClosed(1, 10).forEach(i -> {
                 User user = createUserWithWallet();
                 userRepository.save(user);

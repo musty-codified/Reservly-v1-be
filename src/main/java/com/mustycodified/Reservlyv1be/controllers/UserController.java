@@ -29,8 +29,8 @@ public class  UserController {
                     "Copy the code from you email and enter it in the 'activate-account end point'.\n" +
                     "If no code was sent to you, then use the 'resend-token' end point to resend a new activation code")
     @PostMapping("/signup")
-    public ResponseEntity<ApiResponse<Object>> createUser(@RequestBody @Valid SignupRequestDto signupRequest) {
-        return responseManager.success(userService.signUp(signupRequest));
+    public ResponseEntity<UserResponseDto> createUser(@RequestBody @Valid SignupRequestDto signupRequest) {
+        return new ResponseEntity<>(userService.signUp(signupRequest), HttpStatus.CREATED);
     }
 
     @GetMapping("/{userId}")
@@ -44,8 +44,7 @@ public class  UserController {
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "limit", defaultValue = "5") int limit,
             @RequestParam(value = "sortBy", defaultValue = "id", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir,
-            String username, String email) {
+            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir) {
         Page<UserResponseDto> userResponseDtos = userService.getUsers(page, limit, sortBy, sortDir);
         return responseManager.success(userResponseDtos);
     }

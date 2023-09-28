@@ -32,7 +32,7 @@ public class MemcachedConfig extends AbstractSSMConfiguration {
     @Value("${memcached.service.port}" )
     private int memcachedPort;
 
-    Logger logger = LoggerFactory.getLogger(MemcachedConfig.class);
+   private final Logger logger = LoggerFactory.getLogger(MemcachedConfig.class);
 
     @Bean
     public MemcachedClient memcachedClient() {

@@ -1,6 +1,8 @@
 package com.mustycodified.Reservlyv1be.utils;
 
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.RoomResponseDto;
 import com.mustycodified.Reservlyv1be.dtos.responseDtos.UserResponseDto;
+import com.mustycodified.Reservlyv1be.entities.Room;
 import com.mustycodified.Reservlyv1be.entities.User;
 import org.springframework.stereotype.Component;
 
@@ -18,4 +20,12 @@ public class Mapper {
                 .build();
     }
 
+    public static RoomResponseDto toRoomDto(Room room){
+        return RoomResponseDto.builder()
+                .roomId(room.getId())
+                .description(room.getDescription())
+                .roomNumber(room.getRoomNumber())
+                .roomType(room.getRoomType())
+                .build();
+    }
 }

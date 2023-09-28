@@ -16,7 +16,7 @@ public class LocalMemStorage {
 
     private final MemcachedClient memcachedClient;
 
-    Logger logger = LoggerFactory.getLogger(LocalMemStorage.class);
+    private final Logger logger = LoggerFactory.getLogger(LocalMemStorage.class);
 
     public void save(String key, String value, int expiryInSeconds) {
 
@@ -30,7 +30,6 @@ public class LocalMemStorage {
         }
 
     }
-
 
     public void setBlacklist(String token, int expiryInSeconds) {
         try {

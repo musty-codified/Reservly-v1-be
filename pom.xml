@@ -57,7 +57,7 @@
 			<version>3.0.0</version>
 		</dependency>
 
-		<!--- Memcache Dependency -->
+		<!--- Memcached Dependency -->
 		<dependency>
 			<groupId>com.google.code.simple-spring-memcached</groupId>
 			<artifactId>xmemcached-provider</artifactId>
