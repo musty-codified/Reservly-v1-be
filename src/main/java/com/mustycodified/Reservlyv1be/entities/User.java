@@ -26,10 +26,10 @@ public class User extends BaseEntity{
     @Column(nullable = false)
     private String password;
 
-    @NotNull(message = "Firstname cannot be missing or empty")
+    @NotNull(message = "First name cannot be missing or empty")
     private String firstName;
 
-    @NotNull(message = "Lastname cannot be missing or empty")
+    @NotNull(message = "Last name cannot be missing or empty")
     private String lastName;
 
     @Column(nullable = false)

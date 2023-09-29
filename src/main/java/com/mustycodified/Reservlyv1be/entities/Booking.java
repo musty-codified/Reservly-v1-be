@@ -4,6 +4,8 @@ package com.mustycodified.Reservlyv1be.entities;
 import lombok.*;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -21,15 +23,13 @@ public class Booking extends BaseEntity{
     @JoinColumn(name = "room_id")
     private Room room;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "checkedInDate")
-    private Date checkInDate;
+    private LocalDate checkInDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "checkedOutDate")
-    private Date checkOutDate;
+    private LocalDate checkOutDate;
 
-    private double totalPrice;
+    private BigDecimal totalPrice;
 
     private String transactionStatus;
 

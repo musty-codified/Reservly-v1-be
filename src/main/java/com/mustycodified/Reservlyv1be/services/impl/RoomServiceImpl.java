@@ -11,6 +11,7 @@ import com.mustycodified.Reservlyv1be.utils.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -21,16 +22,18 @@ public class RoomServiceImpl implements RoomService {
     private final RoomRepository roomRepository;
     @Override
     public RoomResponseDto createRoom(RoomRequestDto roomRequestDto) {
-        //validate room
+        //Validate room
       if(roomRepository.existsByRoomNumber(roomRequestDto.getRoomNumber())){
           throw new RecordAlreadyExistException("Room already exist");
       }
+
         //Remember room
         Room room = new Room();
         room.setRoomNumber(roomRequestDto.getRoomNumber());
-        room.setRoomType(RoomType.ROOM_TYPE_SINGLE.getRoom());
+        room.setRoomType(roomRequestDto.getRoomType());
         room.setAvailable(true);
         room.setDescription(roomRequestDto.getRoomDescription());
+        room.setPricePerNight(roomRequestDto.getPricePerNight());
         Room storedRoom = roomRepository.save(room);
         return Mapper.toRoomDto(storedRoom);
     }

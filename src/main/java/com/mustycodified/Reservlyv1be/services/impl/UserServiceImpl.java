@@ -37,7 +37,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -56,9 +55,6 @@ public class UserServiceImpl implements UserService {
     private final LocalMemStorage memStorage;
     private final PasswordEncoder passwordEncoder;
     private final WalletRepository walletRepository;
-
-    private final HttpServletRequest httpServletRequest;
-
 
 
     @Override
@@ -123,7 +119,7 @@ public class UserServiceImpl implements UserService {
 
         //Remember Wallet Details
         Wallet newWallet = Wallet.builder()
-                .walletUUID(appUtil.generateSerialNumber("w"))
+                .walletUUID(appUtil.generateSerialNumber("wal"))
                 .balance(BigDecimal.ZERO)
                 .userDetails(userToActivate)
                 .build();
@@ -198,9 +194,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String logout(String headerToken) {
-
-//     HttpSession session = httpServletRequest.getSession();
-
         if (headerToken.startsWith("Bearer")) {
             headerToken = headerToken.replace("Bearer", "").replace("\\s", "");
         }
@@ -223,7 +216,6 @@ public class UserServiceImpl implements UserService {
 
         return userResponseDto;
     }
-
 
     private void blacklistToken(String headerToken) {
         Date expiryDate = jwtUtil.extractExpiration(headerToken);

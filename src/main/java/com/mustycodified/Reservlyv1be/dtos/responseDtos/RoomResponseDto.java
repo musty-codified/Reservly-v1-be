@@ -1,6 +1,7 @@
 package com.mustycodified.Reservlyv1be.dtos.responseDtos;
 
 
+import com.mustycodified.Reservlyv1be.enums.RoomType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,9 +17,8 @@ public class RoomResponseDto {
 
     private String roomNumber;
 
-    private String roomType;
+    private RoomType roomType;
 
     private String description;
-
 
 }

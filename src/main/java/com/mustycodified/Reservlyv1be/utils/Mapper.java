@@ -1,9 +1,12 @@
 package com.mustycodified.Reservlyv1be.utils;
 
+import com.mustycodified.Reservlyv1be.dtos.responseDtos.BookingResponseDto;
 import com.mustycodified.Reservlyv1be.dtos.responseDtos.RoomResponseDto;
 import com.mustycodified.Reservlyv1be.dtos.responseDtos.UserResponseDto;
+import com.mustycodified.Reservlyv1be.entities.Booking;
 import com.mustycodified.Reservlyv1be.entities.Room;
 import com.mustycodified.Reservlyv1be.entities.User;
+import com.mustycodified.Reservlyv1be.enums.RoomType;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -27,5 +30,18 @@ public class Mapper {
                 .roomNumber(room.getRoomNumber())
                 .roomType(room.getRoomType())
                 .build();
+    }
+
+    public static BookingResponseDto toBookingDto(Booking booking){
+       return BookingResponseDto.builder()
+                .bookingId(booking.getId())
+                .roomId(booking.getRoom().getId())
+                .checkOutDate(booking.getCheckOutDate())
+                .checkInDate(booking.getCheckInDate())
+                .totalPrice(booking.getTotalPrice())
+                .transactionStatus(booking.getTransactionStatus())
+                .userId(booking.getUser().getUserId())
+                .build();
+
     }
 }

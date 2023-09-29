@@ -36,6 +36,14 @@ public class GlobalExceptionHandler {
     }
 
 
+    @ExceptionHandler(value = {RoomServiceException.class})
+    public ResponseEntity<Object> handleRoomServiceException(RoomServiceException ex, WebRequest request) {
+        ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage());
+        errorMessage.setDebugMessage("Room request is currently having an error");
+
+        return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
     @ExceptionHandler(value = {ValidationException.class})
     public ResponseEntity<Object> handleValidationException(ValidationException ex, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage());
@@ -43,6 +51,7 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorMessage, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler(value = {Exception.class})
     public ResponseEntity<Object> handleOtherServiceException(Exception ex, WebRequest request) {
         ErrorMessage errorMessage = new ErrorMessage(new Date(), ex.getMessage());

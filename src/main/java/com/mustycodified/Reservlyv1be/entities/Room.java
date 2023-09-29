@@ -1,12 +1,11 @@
 package com.mustycodified.Reservlyv1be.entities;
 
 
+import com.mustycodified.Reservlyv1be.enums.RoomType;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
@@ -22,9 +21,13 @@ public class Room extends BaseEntity{
     private String roomNumber;
 
     @Column(nullable = false)
-    private String roomType;
+    @Enumerated(EnumType.STRING)
+    private RoomType roomType;
 
     private String description;
+
+    @Column(nullable = false)
+    private BigDecimal pricePerNight;
 
     @Column(nullable = false)
     private boolean isAvailable;

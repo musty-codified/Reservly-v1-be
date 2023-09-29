@@ -31,7 +31,9 @@ public class SecurityConfig {
     private static final String [] WHITE_LISTED_URLS = {
             "/api/v1/payment/**",
             "/api/v1/users/signup",
+            "/api/v1/bookings/**",
             "/api/v1/auth/**",
+            "/api/v1/rooms/**",
             "/api/v1/users/update-password",
             "/v3/api-docs/**", "/configuration/**", "/swagger*/**", "/swagger-ui/**", "/webjars/**"
     };
@@ -43,7 +45,7 @@ public class SecurityConfig {
         http.cors().and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers(WHITE_LISTED_URLS).permitAll()
-                .antMatchers("/api/v1/rooms/**").hasRole(UserRoles.ADMIN.name())
+//                .antMatchers("/api/v1/rooms/**").hasRole(UserRoles.ADMIN.name())
                 .anyRequest()
                 .authenticated()
                 .and()
